@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
@@ -37,6 +38,8 @@ public class Page123SeleniumTest01
     {
         testEntete();
         testPageUne();
+        testPageDeux();
+        testPageTrois();
     }
 
     /**
@@ -79,10 +82,51 @@ public class Page123SeleniumTest01
         input = WEB_DRIVER_CHROME.findElement(By.id("contentForm:pageText"));
         input.sendKeys(Keys.BACK_SPACE + "2");
         WEB_DRIVER_CHROME.findElement(By.id("contentForm:nextPage")).click();
+        testTitrePage("deux");
+    }
+
+    /**
+     * Vérification de la page deux
+     */
+    public void testPageDeux() {
+        allerPage(2);
+        List<WebElement> buttons = WEB_DRIVER_CHROME.findElements(By.tagName("button"));
+        assertEquals("Il n'y a pas trois boutons sur la page deux.", 3, buttons.size());
+
+        //teste la navigation vers la page suivante
+        buttons.get(2).click();
+        testTitrePage("trois");
+    }
+
+    /**
+     * Vérification de la page trois
+     */
+    public void testPageTrois() {
+        allerPage(3);
+        List<WebElement> choix_page = WEB_DRIVER_CHROME.findElement(By.id("contentForm:pageList")).findElements(By.tagName("li"));
+        assertEquals("Il n'y a pas trois choix dans la liste de pages.", 3, choix_page.size());
+
+        //teste la navigation vers la page suivante
+        choix_page.get(0).click();
+        WEB_DRIVER_CHROME.findElement(By.id("contentForm:nextPageButton")).click();
+        testTitrePage("une");
+
+    }
+
+    /**
+     * Permet d'aller à une page précise du site
+     * @param numPage
+     */
+    public void allerPage(int numPage){
+        WEB_DRIVER_CHROME.get("http://127.0.0.1:8080/tutoselenium/faces/page" + numPage + ".xhtml");
+    }
+
+    /**
+     * Vérification du titre de la page
+     */
+    public void testTitrePage(String numPage){
         String title = WEB_DRIVER_CHROME.findElement(By.id("contentForm:pageTitle")).getText();
-        assertEquals("La page suivante n'est pas la page deux.", "Page deux", title);
-
-
+        assertEquals("La page attendu n'est pas la page" + numPage +  ".", "Page " + numPage, title);
     }
 
     /**

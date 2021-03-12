@@ -78,7 +78,7 @@ public class Page123SeleniumTest01
 
         input = WEB_DRIVER_CHROME.findElement(By.id("contentForm:pageText"));
         input.sendKeys(Keys.BACK_SPACE + "2");
-        submit.click();
+        WEB_DRIVER_CHROME.findElement(By.id("contentForm:nextPage")).click();
         String title = WEB_DRIVER_CHROME.findElement(By.id("contentForm:pageTitle")).getText();
         assertEquals("La page suivante n'est pas la page deux.", "Page deux", title);
 
